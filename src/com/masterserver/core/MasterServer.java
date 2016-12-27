@@ -39,6 +39,7 @@ public class MasterServer {
 
 	private void updateServerList() {
 		MasterServerDao.instance.loadServerList(serverList);
+		MasterServerStatistics.instance.increase();
 		System.out.println("列表大小：" + serverList.size());
 	}
 
@@ -51,6 +52,7 @@ public class MasterServer {
 			send(source, sendlength);
 			sendlength += 200;
 		}
+		MasterServerStatistics.instance.increase();
 		System.out.println(new Date() + " 回复请求" + source);
 	}
 

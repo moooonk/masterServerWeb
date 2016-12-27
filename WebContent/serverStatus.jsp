@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*, com.masterserver.core.MasterServer" pageEncoding="utf-8"%>
+<%@ page language="java" import="java.util.*, com.masterserver.core.MasterServer, com.masterserver.core.MasterServerStatistics" pageEncoding="utf-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -43,5 +43,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	out.write("关闭");
     }
     %>
-  </body>
+    <br>
+    -------------统计-------------<br>
+	当前分钟请求量：<%out.write(MasterServerStatistics.instance.getCurrentMinCount()+"次"); %><br>
+	当前小时请求量：<%out.write(MasterServerStatistics.instance.getCurrentHourCount()+"次"); %><br>
+	当前天请求量：<%out.write(MasterServerStatistics.instance.getCurrentDayCount()+"次"); %><br>
+	<br>
+	上一分钟请求量：<%out.write(MasterServerStatistics.instance.getLastMinCount()+"次"); %><br>
+	上一小时请求量：<%out.write(MasterServerStatistics.instance.getLastHourCount()+"次"); %><br>
+	上一天请求量：<%out.write(MasterServerStatistics.instance.getLastDayCount()+"次"); %><br>
+    </body>
 </html>
