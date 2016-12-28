@@ -35,7 +35,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    状态：
+	<script language="JavaScript">
+		function setaction1() {
+			document.forms[0].action = "/masterServerWeb/Action?action=1";
+			document.forms[0].submit();
+		}
+		function setaction2() {
+			document.forms[0].action = "/masterServerWeb/Action?action=2";
+			document.forms[0].submit();
+		}
+		function setaction3() {
+			document.forms[0].action = "/masterServerWeb/Action?action=3";
+			document.forms[0].submit();
+		}
+		function setaction4() {
+			document.forms[0].action = "/masterServerWeb/Action?action=4";
+			document.forms[0].submit();
+		}
+		function setaction5() {
+			document.forms[0].action = "/masterServerWeb/Action?action=5";
+			document.forms[0].submit();
+		}
+		function setaction6() {
+			document.forms[0].action = "/masterServerWeb/Action?action=6";
+			document.forms[0].submit();
+		}
+		function setaction7() {
+			document.forms[0].action = "/masterServerWeb/Action?action=7";
+			document.forms[0].submit();
+		}
+	</script>
+	状态：
     <% 
     if(MasterServer.instance.isActivity()){
     	out.write("开启");
@@ -52,5 +82,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	上一分钟请求量：<%out.write(MasterServerStatistics.instance.getLastMinCount()+"次"); %><br>
 	上一小时请求量：<%out.write(MasterServerStatistics.instance.getLastHourCount()+"次"); %><br>
 	上一天请求量：<%out.write(MasterServerStatistics.instance.getLastDayCount()+"次"); %><br>
+	-----------自动开关------------<br>
+	自动开启时间：<%out.write(MasterServer.instance.getOnHour()+":"+MasterServer.instance.getOnMin()); %><br>
+	自动关闭时间：<%out.write(MasterServer.instance.getOffHour()+":"+MasterServer.instance.getOffMin()); %><br>
+    <form id="serverStatus" action="" method="post">
+    	<input type="submit" name="startprotect" value="开启服务" onclick = "setaction1()"/>
+    	<input type="submit" name="startprotect" value="关闭服务" onclick = "setaction2()"/>
+    	<input type="submit" name="startprotect" value="设置定时开关" onclick = "setaction3()"/>
+    </form>
     </body>
 </html>

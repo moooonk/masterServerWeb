@@ -35,13 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <%
-    String[] ports = request.getParameter("ports").split(":");
-    for(String str :ports){
-    	System.out.println(str);
-    }
-    %>
-    <form id="login" action="servlet/Setautorestart" method="post"> 
+    <form id="login" action="SetAutoCtrl" method="post"> 
 	设置关闭时间(:分隔)<br>
 	每天几点：<input type="text" id="offhour" name="offhour"><br>
 	每天几分：<input type="text" id="offmin" name="offmin"><br>

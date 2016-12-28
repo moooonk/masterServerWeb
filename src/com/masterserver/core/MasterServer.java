@@ -29,6 +29,7 @@ public class MasterServer {
 	private MasterServer() {
 		serverList = new ArrayList<String[]>();
 		MasterServerScheduled.instance.getExecutor().scheduleWithFixedDelay(new JobForUpdate(), 0, 30, TimeUnit.SECONDS);
+		MasterServerScheduled.instance.getExecutor().scheduleWithFixedDelay(new JobForAutoCtrl(), 0, 5, TimeUnit.SECONDS);
 		MasterServerNetwork.instance.start();
 		isActivity = true;
 	}
@@ -39,14 +40,10 @@ public class MasterServer {
 
 	private void updateServerList() {
 		MasterServerDao.instance.loadServerList(serverList);
-		MasterServerStatistics.instance.increase();
 		System.out.println("列表大小：" + serverList.size());
 	}
 
 	public void responseServerList(SocketAddress source) {
-		if (!isActivity) {
-			return;
-		}
 		int sendlength = 0;
 		while (sendlength < serverList.size()) {
 			send(source, sendlength);
@@ -176,6 +173,38 @@ public class MasterServer {
 		}
 	}
 
+	public int getOffHour() {
+		return offHour;
+	}
+
+	public void setOffHour(int offHour) {
+		this.offHour = offHour;
+	}
+
+	public int getOffMin() {
+		return offMin;
+	}
+
+	public void setOffMin(int offMin) {
+		this.offMin = offMin;
+	}
+
+	public int getOnHour() {
+		return onHour;
+	}
+
+	public void setOnHour(int onHour) {
+		this.onHour = onHour;
+	}
+
+	public int getOnMin() {
+		return onMin;
+	}
+
+	public void setOnMin(int onMin) {
+		this.onMin = onMin;
+	}
+
 	class JobForUpdate implements Runnable {
 
 		public void run() {
@@ -184,4 +213,12 @@ public class MasterServer {
 		}
 
 	}
+	
+	class JobForAutoCtrl implements Runnable {
+		
+		public void run() {
+			autoOnOrOff();
+		}
+	}
+	
 }

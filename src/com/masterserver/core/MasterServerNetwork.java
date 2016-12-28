@@ -43,7 +43,7 @@ public class MasterServerNetwork extends Thread {
 		}
 		while (true) {
 			SocketAddress source = recpak(paksize);
-			if (source != null) {
+			if (source != null && MasterServer.instance.isActivity()) {
 				MasterServerScheduled.instance.getExecutor().schedule(new JobForResponse(source), 0, TimeUnit.SECONDS);
 			}
 		}
