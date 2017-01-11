@@ -102,7 +102,7 @@ public class MasterServerNetwork extends Thread {
 
 		public void run() {
 			// TODO Auto-generated method stub
-			MasterServer.instance.responseServerList(source);
+			//MasterServer.instance.responseServerList(source);
 		}
 	}
 

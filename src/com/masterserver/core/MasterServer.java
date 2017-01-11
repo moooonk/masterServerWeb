@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import io.netty.channel.Channel;
+
 /**
  * @author huangguanlin
  * 
@@ -30,7 +32,7 @@ public class MasterServer {
 		serverList = new ArrayList<String[]>();
 		MasterServerScheduled.instance.getExecutor().scheduleWithFixedDelay(new JobForUpdate(), 0, 30, TimeUnit.SECONDS);
 		MasterServerScheduled.instance.getExecutor().scheduleWithFixedDelay(new JobForAutoCtrl(), 0, 5, TimeUnit.SECONDS);
-		MasterServerNetwork.instance.start();
+		MasterServerNetworkNetty.instance.init();
 		isActivity = true;
 	}
 
@@ -43,7 +45,7 @@ public class MasterServer {
 		System.out.println("列表大小：" + serverList.size());
 	}
 
-	public void responseServerList(SocketAddress source) {
+	public void responseServerList(Channel source) {
 		int sendlength = 0;
 		while (sendlength < serverList.size()) {
 			send(source, sendlength);
@@ -63,7 +65,7 @@ public class MasterServer {
 		return ret;
 	}
 
-	private void send(SocketAddress source, int begin) {
+	private void send(Channel source, int begin) {
 		int size = 6;
 		int num;
 		byte[] sbuf = new byte[1206];
@@ -125,7 +127,7 @@ public class MasterServer {
 			if (size == 1206)
 				break;
 		}
-		MasterServerNetwork.instance.sendpak(source, sbuf);
+		//MasterServerNetwork.instance.sendpak(source, sbuf);
 	}
 
 	public boolean isActivity() {
