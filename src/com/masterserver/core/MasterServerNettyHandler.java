@@ -4,6 +4,7 @@
 package com.masterserver.core;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -29,8 +30,9 @@ public class MasterServerNettyHandler extends SimpleChannelInboundHandler<Datagr
 		ByteBuf buf = (ByteBuf) msg.copy().content();
 		byte[] req = new byte[buf.readableBytes()];
 		buf.readBytes(req);
+		buf.release();
 		if(checkRequest(req)){
-			MasterServerScheduled.instance.getExecutor().schedule(new JobForResponse(ctx.channel()), 0, TimeUnit.SECONDS);
+			MasterServerScheduled.instance.getExecutor().schedule(new JobForResponse(msg.sender()), 0, TimeUnit.SECONDS);
 		}
 		
 	}
@@ -49,10 +51,10 @@ public class MasterServerNettyHandler extends SimpleChannelInboundHandler<Datagr
 	}
 	
 	class JobForResponse implements Runnable {
-		private Channel source;
+		private InetSocketAddress source;
 
-		public JobForResponse(Channel channel) {
-			this.source = channel;
+		public JobForResponse(InetSocketAddress inetSocketAddress) {
+			this.source = inetSocketAddress;
 		}
 
 		public void run() {

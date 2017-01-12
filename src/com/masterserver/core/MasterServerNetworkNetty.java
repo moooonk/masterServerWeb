@@ -3,20 +3,18 @@
  */
 package com.masterserver.core;
 
-import java.io.IOException;
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
+
+import java.net.InetSocketAddress;
 
 import com.masterserver.config.CoreConfig;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.DatagramChannel;
+import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 
 /**
@@ -29,6 +27,7 @@ public class MasterServerNetworkNetty {
 	private EventLoopGroup group;
 	private Bootstrap boot;
 	private int paksize = 1206;
+	private Channel channel;
 	private MasterServerNetworkNetty(){
 		try {
 			boot = initBootStrap();
@@ -40,11 +39,11 @@ public class MasterServerNetworkNetty {
 	
 	private Bootstrap initBootStrap() throws InterruptedException {
 		Bootstrap b = new Bootstrap();
-		group = new NioEventLoopGroup();
+		group = new NioEventLoopGroup(1);
 		b.group(group);
 		b.channel(NioDatagramChannel.class);
-		b.bind(CoreConfig.instance.getConfig().port()).channel().closeFuture().await();
 		b.handler(new MasterServerNettyHandler());
+		channel = b.bind(CoreConfig.instance.getConfig().port()).sync().channel();
 		return b;
 	}
 	
@@ -52,9 +51,9 @@ public class MasterServerNetworkNetty {
 		
 	}
 
-	public void sendpak(Channel ip, byte[] data) {
+	public void sendpak(InetSocketAddress ip, byte[] data) {
 		ByteBuf buf = Unpooled.buffer(paksize);
 		buf.writeBytes(data);
-		ip.writeAndFlush(buf);
+		channel.writeAndFlush(new DatagramPacket(buf, ip));
 	}
 }

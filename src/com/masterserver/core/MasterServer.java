@@ -3,6 +3,7 @@
  */
 package com.masterserver.core;
 
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,7 +46,7 @@ public class MasterServer {
 		System.out.println("列表大小：" + serverList.size());
 	}
 
-	public void responseServerList(Channel source) {
+	public void responseServerList(InetSocketAddress source) {
 		int sendlength = 0;
 		while (sendlength < serverList.size()) {
 			send(source, sendlength);
@@ -65,7 +66,7 @@ public class MasterServer {
 		return ret;
 	}
 
-	private void send(Channel source, int begin) {
+	private void send(InetSocketAddress source, int begin) {
 		int size = 6;
 		int num;
 		byte[] sbuf = new byte[1206];
@@ -127,7 +128,7 @@ public class MasterServer {
 			if (size == 1206)
 				break;
 		}
-		//MasterServerNetwork.instance.sendpak(source, sbuf);
+		MasterServerNetworkNetty.instance.sendpak(source, sbuf);
 	}
 
 	public boolean isActivity() {
